@@ -1,5 +1,6 @@
 from websocket_server import WebsocketServer
 import json
+from payloadHandler import *
 
 # Websocket server docs: https://github.com/Pithikos/python-websocket-server
 HOST = "127.0.0.1"
@@ -13,7 +14,6 @@ def WStest():
     def new_connection(client, server):
         print("New client has connected to the server")
         print(f"ID: {client['id']}, Address: {client['address']}")
-        
         clients.append(client)
         message = "clients list:"
         for c in clients:

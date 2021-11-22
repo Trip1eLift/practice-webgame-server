@@ -1,0 +1,125 @@
+{
+    "protocols-game-server-to-client": [
+        {
+            "type": "login",
+            "subtype": "client",
+            "result": "allow",
+            "_comment": "This is sent from game server to client to reply client's login attempts. Deny if login info unmatch or unset."
+        },
+        {
+            "type": "room",
+            "subtype": "list",
+            "rooms": [
+                {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740"},
+                {"name": "join me", "id": "<uuidv4>", "owner-id": "blablabla"}
+            ],
+            "_comment": "This is sent to client whenever there's a new room being created or room being closed."
+        },
+        {
+            "type": "game",
+            "subtype": "map",
+            "map": "<details of map (not just map numbers)>",
+            "_comment": "This populate the map after game starts. (Game starts right after when everyone is ready)."
+        },
+        {
+            "type": "game",
+            "subtype": "current",
+            "environment": "<add-ons to map detail>",
+            "players": [
+                {
+                    "name": "Joseph", 
+                    "id": "jbc5740",
+                    "position": [10, 5, 2],
+                    "direction": [1, 0, 0],
+                    "effect": "<not defined yet>"
+                }
+            ],
+            "bullets": [
+                {
+                    "type": "cannon",
+                    "position": [10, 5, 2],
+                    "direction": [1, 0, 0]
+                }
+            ],
+            "weapons": [
+                {
+                    "type": "m16",
+                    "position": [10, 5, 2],
+                    "direction": [1, 0, 0]
+                }
+            ]
+        },
+        {
+            "type": "game",
+            "subtype": "over",
+            "winner-id": "jbc5740",
+            "results": "<not defined yet>"
+        }
+    ],
+    "protocols-game-server-to-login-server": "close",
+    "protocols-login-server-to-game-server": [
+        {
+            "type": "login",
+            "subtype": "set",
+            "server-key": "<secret>",
+            "incoming-user-id": "jbc5740",
+            "incoming-user-token": "<uuidv4>",
+            "_comment": "This can only be sent by login server, which contains incoming login info and a login server key for security."
+        }
+    ],
+    "protocols-client-to-game-server": [
+        {
+            "type": "login",
+            "subtype": "client",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "_comment": "This is sent by client to login, game server checks if the login is set. If not set, deny login."
+        },
+        {
+            "type": "room",
+            "subtype": "list",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "_comment": "To ask for the list of all existing rooms when login."
+        },
+        {
+            "type": "room",
+            "subtype": "create",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "roomname": "<named-by-user>",
+            "_comment": "Client creates a room."
+        },
+        {
+            "type": "room",
+            "subtype": "close",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "room-id": "<uuidv4>",
+            "_comment": "Only owner can close the room, so user-id and token must match room owner-id."
+        },
+        {
+            "type": "room",
+            "subtype": "join",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "room-id": "<uuidv4>",
+            "_comment": "Join a room created by another client."
+        },
+        {
+            "type": "game",
+            "subtype": "control",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "control": "forward",
+            "_comment": "This is constantly sent by client to control client's character. The control can be forward, backward, left, right, jump, shoot."
+        },
+        {
+            "type": "game",
+            "subtype": "leave",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "_comment": "Let client dodge the game. (Only for testing)"
+        }
+    ]
+}
