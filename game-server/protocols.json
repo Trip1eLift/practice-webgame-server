@@ -3,27 +3,31 @@
         {
             "type": "login",
             "subtype": "client",
+            "direction": "game-server2client",
             "result": "allow",
             "_comment": "This is sent from game server to client to reply client's login attempts. Deny if login info unmatch or unset."
         },
         {
             "type": "room",
             "subtype": "list",
+            "direction": "game-server2client",
             "rooms": [
-                {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740"},
-                {"name": "join me", "id": "<uuidv4>", "owner-id": "blablabla"}
+                {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": true}]},
+                {"name": "join me", "id": "<uuidv4>", "owner-id": "blablabla", "players": [{"id": "blablabla", "ready": false}]}
             ],
             "_comment": "This is sent to client whenever there's a new room being created or room being closed."
         },
         {
             "type": "game",
             "subtype": "map",
+            "direction": "game-server2client",
             "map": "<details of map (not just map numbers)>",
             "_comment": "This populate the map after game starts. (Game starts right after when everyone is ready)."
         },
         {
             "type": "game",
             "subtype": "current",
+            "direction": "game-server2client",
             "environment": "<add-ons to map detail>",
             "players": [
                 {
@@ -52,6 +56,7 @@
         {
             "type": "game",
             "subtype": "over",
+            "direction": "game-server2client",
             "winner-id": "jbc5740",
             "results": "<not defined yet>"
         }
@@ -61,6 +66,7 @@
         {
             "type": "login",
             "subtype": "set",
+            "direction": "login-server2game-server",
             "server-key": "<secret>",
             "incoming-user-id": "jbc5740",
             "incoming-user-token": "<uuidv4>",
@@ -71,6 +77,7 @@
         {
             "type": "login",
             "subtype": "client",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "_comment": "This is sent by client to login, game server checks if the login is set. If not set, deny login."
@@ -78,6 +85,7 @@
         {
             "type": "room",
             "subtype": "list",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "_comment": "To ask for the list of all existing rooms when login."
@@ -85,6 +93,7 @@
         {
             "type": "room",
             "subtype": "create",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "roomname": "<named-by-user>",
@@ -93,6 +102,7 @@
         {
             "type": "room",
             "subtype": "close",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "room-id": "<uuidv4>",
@@ -101,14 +111,25 @@
         {
             "type": "room",
             "subtype": "join",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "room-id": "<uuidv4>",
             "_comment": "Join a room created by another client."
         },
         {
+            "type": "room",
+            "subtype": "leave",
+            "direction": "client2game-server",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "room-id": "<uuidv4>",
+            "_comment": "Leave a room created by another client. Owner cannot leave a room created by owner."
+        },
+        {
             "type": "game",
             "subtype": "control",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "control": "forward",
@@ -117,6 +138,7 @@
         {
             "type": "game",
             "subtype": "leave",
+            "direction": "client2game-server",
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "_comment": "Let client dodge the game. (Only for testing)"
