@@ -1,52 +1,21 @@
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
-
-const SERVER_URL = 'ws://127.0.0.1:5001';
-
-let Connection;
+import { useState } from "react";
+import Login from "./Login";
+import Room from "./Room";
 
 export default function App() {
 
-  const [print, setPrint] = useState([]);
-  const [rerender, setRerender] = useState(uuidv4()); // This trrigger re-render onmessage
-  
-  // websocket part
-  useEffect(() => {
-    Connection = new WebSocket(SERVER_URL);
-    Connection.onopen = (() => {
-      console.log('WebSocket Client Connected');
-    });
+  const [appstate, setAppstate] = useState("login");
+  const [user, setUser] = useState(null);
+  const [connection, setConnection] = useState(null);
 
-    Connection.onmessage = ((msg) => {
-      console.log(msg.data);
-      let newPrt = print;
-      newPrt.push(msg.data);
-      setPrint(newPrt);
-      setRerender(uuidv4());
-    });
-  }, []);
-
-  function handleOnclick() {
-    const data = {
-      type: "message",
-      message: "clicked",
-      id: uuidv4()
-    }
-    Connection.send(JSON.stringify(data));
-  }
-
-  function Printall() {
-    return (<>{print.map((ele) => {
-      return <div key={uuidv4()}>{ele}</div>
-    })}</>)
-  }
+  if (appstate === "login")
+    return ( <Login setAppstate={setAppstate} setUser={setUser} setConnection={setConnection} /> );
+  else if (appstate === "room")
+    return ( <Room setAppstate={setAppstate} user={user} connection={connection} /> );
 
   return (
     <div>
-      <div>Hello World!</div>
-      <button onClick={(e)=>handleOnclick()}>Click me</button>
-      <Printall />
-      <div></div>
+      Hello World APP
     </div>
   );
 }

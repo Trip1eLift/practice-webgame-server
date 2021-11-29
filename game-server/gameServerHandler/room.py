@@ -1,4 +1,4 @@
-import settings
+import gameServerHandler.settings as settings
 import json
 import uuid
 
@@ -54,7 +54,7 @@ def global_list_room(server):
 
 
 def create_room(json_obj, client, server):
-    # {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": true}]}
+    # {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": False}]}
     room = {
         "name": json_obj['roomname'],
         "id": uuid.uuid4(),
@@ -85,7 +85,7 @@ def close_room(json_obj, client, server):
 def join_room(json_obj, client, server):
     # Assume a player can only join room if not in any room
     # Therefore, no checking for if player is in a room already
-    #{"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": ["jbc5740"]}
+    # {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": False}]}
     for room in settings.room_list:
         if room['id'] == json_obj['room-id']:
             player = {
@@ -118,7 +118,46 @@ def player_ready(json_obj, client, server):
     #  0. mutex lock
     #  1. start the game (login list need to store client)
     #  2. remove the room
+    # {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": False}]}
+    for room in settings.room_list:
+        if room['id'] == json_obj['room-id']:
+            for player in room['players']:
+                if player['id'] == json_obj['user-id']: # Assume must find
+                    player['ready'] = True # not sure if this works in python (if it push all the way into settings.room_list)
+                    break
+
+            allready = True
+            for player in room['players']:
+                if player['ready'] == False:
+                    allready = False
+            
+            if allready == True:
+                trigger_game_start_in_room(json_obj['room-id'], server)
     return
 
+def trigger_game_start_in_room(room_id, server):
+    payload = {
+        "type": "game",
+        "subtype": "map",
+        "direction": "game-server2client",
+        "map": "<not defined yet"
+    }
+    message = json.dumps(payload)
+    for room in settings.room_list:
+        if room['id'] == room_id:
+            for player in room['players']:
+                # search player in login list
+                for user in settings.login_list:
+                    if user['id'] == player['id']:
+                        server.send_message(user['connection'], message)
+            return
+
+
+
 def player_unready(json_obj, client, server):
-    return
+    for room in settings.room_list:
+        if room['id'] == json_obj['room-id']:
+            for player in room['players']:
+                if player['id'] == json_obj['user-id']: # Assume must find
+                    player['ready'] = False # not sure if this works in python (if it push all the way into settings.room_list)
+                    return

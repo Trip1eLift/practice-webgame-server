@@ -23,11 +23,7 @@ def onmessage(json_obj, client, server):
 def printHello():
     print('Hello')
 
-test = {}
-test['type'] = 'login'
-onmessage(test)
 
-#input('Press ENTER to exit')
 
 
 

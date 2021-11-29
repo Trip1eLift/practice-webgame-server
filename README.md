@@ -2,7 +2,7 @@
 Use python as the backend concurrent server
 
 
-## Python Server
+## Game Server  5001
 To setup python virtual environment
 ```console
 cd server
@@ -27,7 +27,7 @@ pip install -r requirements.txt
 deactivate
 ```
 
-## React Client
+## React Client 3000
 To setup react environment
 ```console
 cd client
@@ -38,3 +38,7 @@ To run
 ```console
 yarn start
 ```
+
+## Login Server 5000
+
+Similar to Game Server above

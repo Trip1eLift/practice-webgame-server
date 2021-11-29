@@ -4,8 +4,21 @@
 def init():
     global login_list
     login_list = []
+    # [{
+    #   "id": json_obj['incoming-user-id'],
+    #   "token": json_obj['incoming-user-token'],
+    #   "time": "later",
+    #   "connection": client_obj => {'id':client_id, 'handler':client_handler, 'address':(addr, port)}
+    # }]
+
     global room_list
     room_list = []
+    # [{
+    #   "name": "room no.1", 
+    #   "id": "<uuidv4>", 
+    #   "owner-id": "jbc5740", 
+    #   "players": [{"id": "jbc5740", "ready": False}]
+    # }]
 
 
 def check_login(json_obj):

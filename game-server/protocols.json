@@ -22,7 +22,7 @@
             "subtype": "map",
             "direction": "game-server2client",
             "map": "<details of map (not just map numbers)>",
-            "_comment": "This populate the map after game starts. (Game starts right after when everyone is ready)."
+            "_comment": "This populate the map once the game starts. (Game starts right after when everyone is ready)."
         },
         {
             "type": "game",
@@ -127,6 +127,15 @@
             "_comment": "Leave a room created by another client. Owner cannot leave a room created by owner."
         },
         {
+            "type": "room",
+            "subtype": "ready",
+            "direction": "client2game-server",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "room-id": "<uuidv4>",
+            "_comment": "Set a player in a room to be ready. Start the game if all players are ready"
+        },
+        {
             "type": "game",
             "subtype": "control",
             "direction": "client2game-server",
@@ -142,6 +151,26 @@
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "_comment": "Let client dodge the game. (Only for testing)"
+        }
+    ],
+    "http-client-to-login-server": [
+        {
+            "path": "/login",
+            "method": "post",
+            "payload": {
+                "id": "jbc5740",
+                "password": "password"
+            }
+        }
+    ],
+    "http-login-server-to-client": [
+        {
+            "path": "/login",
+            "method": "reply to post",
+            "payload": {
+                "id": "jbc5740",
+                "token": "<uuidv4>"
+            }
         }
     ]
 }

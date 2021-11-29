@@ -1,5 +1,7 @@
 import json
-import settings
+import gameServerHandler.settings as settings
+
+GameServerSecret = "secret"
 
 def login_handler(json_obj, client, server):
     if json_obj['type'] != 'login':
@@ -10,20 +12,19 @@ def login_handler(json_obj, client, server):
         client_login_attempt(json_obj, client, server)
 
 def set_login(json_obj, client, server):
-    # check if user is already logged in
-    logged_in = False
-    for user in settings.login_list:
-        if user['id'] == json_obj['incoming-user-id']:
-            logged_in = True
-            break
-    if logged_in == True:
-        server.send_message(client, "close")
-
-    if json_obj['server-key'] == "secret":
+    if json_obj['server-key'] == GameServerSecret:
+        # check if user is already logged in
+        for user in settings.login_list:
+            if user['id'] == json_obj['incoming-user-id']:
+                user['token'] = json_obj['incoming-user-token']
+                server.send_message(client, "close")
+                return
+    
         user = {
             "id": json_obj['incoming-user-id'],
             "token": json_obj['incoming-user-token'],
-            "time": "later"
+            "time": "later",
+            "connection": None
         }
         settings.login_list.append(user)
     server.send_message(client, "close")
@@ -34,6 +35,7 @@ def client_login_attempt(json_obj, client, server):
     for user in settings.login_list:
         if user['id'] == json_obj['user-id']:
             logged_in = True
+            user['connection'] = client # Not sure if this works
             break
     payload = {
         "type": "login",
