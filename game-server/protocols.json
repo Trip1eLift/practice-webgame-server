@@ -133,7 +133,16 @@
             "user-id": "jbc5740",
             "user-token": "<uuidv4>",
             "room-id": "<uuidv4>",
-            "_comment": "Set a player in a room to be ready. Start the game if all players are ready"
+            "_comment": "Set a player in a room to be ready. Start the game if all players are ready."
+        },
+        {
+            "type": "room",
+            "subtype": "unready",
+            "direction": "client2game-server",
+            "user-id": "jbc5740",
+            "user-token": "<uuidv4>",
+            "room-id": "<uuidv4>",
+            "_comment": "Set a player in a room to be not ready."
         },
         {
             "type": "game",

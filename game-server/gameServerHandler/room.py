@@ -57,7 +57,7 @@ def create_room(json_obj, client, server):
     # {"name": "room no.1", "id": "<uuidv4>", "owner-id": "jbc5740", "players": [{"id": "jbc5740", "ready": False}]}
     room = {
         "name": json_obj['roomname'],
-        "id": uuid.uuid4(),
+        "id": str(uuid.uuid4()),
         "owner-id": json_obj['user-id'],
         "players": [ 
             {

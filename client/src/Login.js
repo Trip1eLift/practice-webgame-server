@@ -11,8 +11,8 @@ export default function Login({setAppstate, setUser, setConnection}) {
 	function handleLogin() {
 		const path = "http://127.0.0.1:5000/login";
 		const body = {
-			"id": "jbc5740",
-    		"password": "password"
+			"id": uuidv4(),
+    	"password": "password"
 		};
 		const headers = {"Content-Type": "application/json"};
 		axios.post(path, body, {headers: headers})
@@ -46,6 +46,11 @@ export default function Login({setAppstate, setUser, setConnection}) {
 						}
 						Connection.send(JSON.stringify(payload));
 					});
+
+					Connection.onclose = (() => {
+						setAppstate("login");
+					});
+					
 					setConnection(Connection);
 				}
 			})

@@ -23,6 +23,7 @@ def WS_Starts():
         return
 
     def on_close(client, server):
+        # needs to handle disconnection cleanup
         print(f"ID: {client['id']}, Address: {client['address']}", " has left.")
         return
 
