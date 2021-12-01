@@ -2,9 +2,12 @@ from websocket import create_connection
 from flask import Flask, request, Response
 import json
 import uuid
+import os
 
 # websocket client: https://github.com/Pithikos/websocket-client
 GameServerPath = "ws://127.0.0.1:5001"
+if os.environ.get('GAME_SERVER_HOST') != None:
+    GameServerPath = "ws://" + os.environ.get('GAME_SERVER_HOST') + ":5001"
 GameServerSecret = "secret"
 
 app = Flask(__name__)
@@ -58,4 +61,4 @@ def login():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

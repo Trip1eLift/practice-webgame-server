@@ -3,7 +3,7 @@ import json
 from payloadHandler import *
 
 # Websocket server docs: https://github.com/Pithikos/python-websocket-server
-HOST = "127.0.0.1"
+HOST = "0.0.0.0"
 PORT = 5001
 
 def WS_Starts():
@@ -30,6 +30,7 @@ def WS_Starts():
     server.set_fn_new_client(new_connection)
     server.set_fn_message_received(on_recieve)
     server.set_fn_client_left(on_close)
+    print("Listening on: ws://" + HOST + ":" + str(PORT))
     server.run_forever()
 
     return 'TERMINATE'

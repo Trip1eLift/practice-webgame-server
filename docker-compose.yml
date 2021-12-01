@@ -1,0 +1,36 @@
+ version: "3.7"
+
+ services:
+  game-server:
+    container_name: game-server
+    image: python:3.7-alpine
+    command: sh -c "cd game-server && pip install -r requirements.txt && python main.py"
+    ports:
+      - 5001:5001
+    working_dir: /game-server
+    volumes:
+      - ./:/game-server
+  login-server:
+    container_name: login-server
+    image: python:3.7-alpine
+    command: sh -c "cd login-server && pip install -r requirements.txt && python main.py"
+    ports:
+      - 5000:5000
+    working_dir: /login-server
+    volumes:
+      - ./:/login-server
+    links:
+      - "game-server:gameserver"
+    environment:
+      - GAME_SERVER_HOST=gameserver
+  client:
+    container_name: web-client
+    image: node:14-alpine
+    command: sh -c "cd client && yarn install && yarn start"
+    ports:
+      - 3000:3000
+    build: ./client
+    volumes:
+      - ./client/:/client/
+      - /client/node_modules
+    
